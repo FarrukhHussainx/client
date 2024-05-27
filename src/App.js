@@ -1,23 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import axios from "axios";
+import Stripe from "react-stripe-checkout";
 
 function App() {
+  const handelToken = (totalAmount, token) => {
+    try {
+      axios.post("http://localhost:5000/api/stripe", {
+        token: token.id,
+        amount: totalAmount,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const tokenHandler = (token) => {
+    handelToken(100, token);
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Stripe
+        stripeKey="pk_test_51MTj5ELpSKrpHwNC9BfN99eVtDdfeRLnRns5fjdKv2ceyZ6pZB1hNQPmNANykEfHCBwmn9KOsqAs0iAGJlx2tcLu00PvWP1g8j"
+        token={tokenHandler}
+      />
     </div>
   );
 }
